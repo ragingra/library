@@ -1,0 +1,6 @@
+{
+    "name": "contrast",
+    "devDependencies": {
+        "cypress": "^5.3.0"
+    }
+}

@@ -1,0 +1,3 @@
+CREATE DATABASE contrast_libraries_prod;
+CREATE DATABASE contrast_libraries_dev;
+CREATE DATABASE contrast_libraries_test;

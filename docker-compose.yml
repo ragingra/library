@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+
+  server:
+    build:
+      context: ./services/server
+      dockerfile: Dockerfile
+    volumes:
+      - './services/server:/usr/src/app'
+    # env_file: server.env
+    ports:
+      - 5001:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@server-db:5432/contrast_libraries_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@server-db:5432/contrast_libraries_test
+      - PYTHONUNBUFFERED="true"
+    depends_on:
+      - server-db
+
+  server-db:
+    build:
+      context: ./services/server/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  
+  nginx:
+    build:
+      context: ./services/nginx
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - server
+      - client
+
+  client:
+    build:
+      context: ./services/client
+      dockerfile: Dockerfile
+    volumes:
+      - './services/client:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - 3001:3000
+    environment:
+      - REACT_APP_BACKEND_SERVICE_URL=${REACT_APP_BACKEND_SERVICE_URL}
+    depends_on:
+      - server
+    stdin_open: true
