@@ -54,7 +54,7 @@ const App = () => {
         <div className="columns">
           <div className="column">
             <br/>
-            <h1 className="title is-1">Libraries</h1>
+  <h1 className="title is-1">Libraries - Count: {libraries.length}</h1>
             <hr/><br/>
 
             <div className="tabs">
